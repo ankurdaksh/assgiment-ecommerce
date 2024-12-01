@@ -15,7 +15,7 @@ export default function VerifyEmailPage() {
       if (token) {
         try {
           await verifyEmail(token);
-          router.push('/success'); 
+          router.push('/'); 
         } catch (error) {
           console.error('Verification failed:', error);
           router.push('/login'); 

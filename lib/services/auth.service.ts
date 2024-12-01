@@ -18,7 +18,7 @@ interface LoginData {
 export async function registerUser(data: RegisterData) {
   await connectDB();
 
-  const existingUser = await User.findOne({ email: data.email });
+  const existingUser = await User.findOne({ email: data.email }) ;
   if (existingUser) {
     throw new Error('Email already registered');
   }

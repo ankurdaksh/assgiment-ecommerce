@@ -10,7 +10,10 @@ export default function Navbar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const isAuthPage = pathname === '/login' || pathname === '/signup';
-
+  const initialState = {
+    access: typeof window !== "undefined" ? window.localStorage.getItem('authToken') : false,
+};
+ 
   const handleLogout = async () => {
     try {
       await logout();
@@ -28,7 +31,7 @@ export default function Navbar() {
           </div>
         
         <div className="ml-auto flex items-center space-x-4">
-          {!isAuthPage && user ? (
+          {initialState.access ? (
             <>
               <Link href="/products">
                 <Button variant="ghost">Products</Button>
@@ -52,7 +55,7 @@ export default function Navbar() {
               </Button>
             </>
           ) : (
-            !isAuthPage && (
+            !initialState.access && (
               <Link href="/login">
                 <Button>Sign In</Button>
               </Link>

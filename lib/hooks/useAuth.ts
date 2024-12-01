@@ -7,13 +7,13 @@ import { toast } from 'sonner';
 
 interface User {
   id: string;
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
 }
 
 interface LoginData {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }
 
 interface RegisterData extends LoginData {
@@ -25,25 +25,26 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get('/api/auth/me');
-        setUser(response.data.user);
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await axios.get('/api/auth/me');
+  //       setUser(response.data.user);
+  //     } catch (error) {
+  //       setUser(null);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchUser();
-  }, []);
+  //   fetchUser();
+  // }, []);
 
   const login = async (data: LoginData) => {
     try {
       const response = await axios.post('/api/auth/login', data);
       setUser(response.data.user);
+      localStorage.setItem('authToken',response.data.user.token);
       toast.success('Logged in successfully');
       router.push('/products');
     } catch (error) {
@@ -71,6 +72,7 @@ export function useAuth() {
     try {
       await axios.post('/api/auth/logout');
       setUser(null);
+      localStorage.clear()
       toast.success('Logged out successfully');
       router.push('/login');
     } catch (error) {

@@ -3,6 +3,8 @@ import { connectDB } from '@/lib/db';
 import { generateToken } from '@/lib/auth';
 import crypto from 'crypto';
 import { sendVerificationEmail } from './email.service';
+import { IUser, UserResponse } from '../models/IUser';
+
 
 interface RegisterData {
   name: string;
@@ -18,7 +20,7 @@ interface LoginData {
 export async function registerUser(data: RegisterData) {
   await connectDB();
 
-  const existingUser = await User.findOne({ email: data.email }) ;
+  const existingUser = await User.findOne({ email: data.email }) as IUser | null ;
   if (existingUser) {
     throw new Error('Email already registered');
   }
